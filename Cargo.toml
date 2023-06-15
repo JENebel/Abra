@@ -1,8 +1,11 @@
 [package]
 name = "pocus"
 version = "0.1.0"
+authors = ["Joachim Enggaard Nebel"]
 edition = "2021"
+license = "BSD-2-Clause"
+description = "Chess GUI with a focus on engine testing tournaments"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+chess = "3.2.0"
