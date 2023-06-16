@@ -2,6 +2,13 @@ use std::{io::stdin, process, thread, sync::mpsc::{channel, Receiver}, str::From
 
 use super::*;
 
+
+pub fn start_cli() {
+    println!("{} {} by {}", PKG_NAME, PKG_VERSION, PKG_AUTHORS);
+
+    interface_loop();
+}
+
 pub fn interface_loop() {
     // Spawn listening thread that reads input without blocking main thread
     let ui_receiver = spawn_ui_listener_thread();

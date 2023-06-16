@@ -9,3 +9,5 @@ description = "Chess GUI with a focus on engine testing tournaments"
 
 [dependencies]
 chess = "3.2.0"
+dioxus = "0.3.2"
+dioxus-desktop = "0.3.0"
