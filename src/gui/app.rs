@@ -35,12 +35,16 @@ fn App(cx: Scope) -> Element {
             rel:"stylesheet"
         },
 
-        div {
-            Menu(cx),
-            match *page.read() {
-                Page::Play => PlayPage(cx),
-                Page::Tourney => TourneyPage(cx),
-                _ => render!{ p { "Not implemented yet" } }
+        body {
+            style: "min-height: 100vh; background-color: #ededed;",
+            div {
+                style: "min-height: 100%; width: 100%; margin: 0; padding: 0;",
+                Menu(cx),
+                match *page.read() {
+                    Page::Play => PlayPage(cx),
+                    Page::Tourney => TourneyPage(cx),
+                    _ => render!{ p { "Not implemented yet" } }
+                }
             }
         }
     })

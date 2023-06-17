@@ -18,11 +18,11 @@ pub fn Game(cx: Scope, interactible: bool) -> Element {
             style: "{layout_box} ",
 
             div {
-                style: "{panel_style} width: 60%;",
+                style: "{panel_style} width: 100%;",
                 padding: "1.6em",
             },
             div {
-                style: "{panel_style} width: 40%;",
+                style: "{panel_style} min-width: 35em;",
                 padding: "1.6em",
 
                 div {
@@ -77,7 +77,7 @@ pub fn Game(cx: Scope, interactible: bool) -> Element {
 
                                 p {
                                     style: "margin: 0.5em; text-align: center; font-weight: bold; font-size: 1.2em; overflow: hidden; white-space: nowrap;",
-                                    "Cadabra"
+                                    "Cadabra 1.0.2"
                                 }
 
                                 p {
