@@ -21,31 +21,27 @@ pub enum Page {
 }
 
 fn App(cx: Scope) -> Element {
-    let mut page = Page::Play;
-
     use_shared_state_provider(cx, || Page::Play);
+    let page = use_shared_state::<Page>(cx).unwrap();
     
     cx.render(rsx!{
-
         link { 
             href:"https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css",
             rel:"stylesheet"
         },
 
-        Menu(cx),
-
-        button { 
-            onclick: move |_| println!("Dummy button clicked"),
-            "Dummy button"
+        link { 
+            href:"src/gui/style.css",
+            rel:"stylesheet"
         },
 
         div {
-            margin: "1em",
-            match page {
+            Menu(cx),
+            match *page.read() {
                 Page::Play => PlayPage(cx),
                 Page::Tourney => TourneyPage(cx),
-                _ => unreachable!()
+                _ => render!{ p { "Not implemented yet" } }
             }
-        }   
+        }
     })
 }

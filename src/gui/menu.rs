@@ -4,8 +4,10 @@ pub fn Menu(cx: Scope) -> Element {
     cx.render(rsx!{
         // use a for loop where the body itself is RSX
         div {
-            class: "pure-menu pure-menu-horizontal",
-            background: "#9c9c9c",
+            style: "display: flex; flex-direction: row; padding-left: 0.5em; padding-top: 0.25em;",
+            background: "lightgray",
+            border_bottom: "solid 0.16em gray",
+
             MenuButton(cx, Page::Play),
             MenuButton(cx, Page::Tourney),
             MenuButton(cx, Page::Engines),
@@ -19,16 +21,43 @@ pub fn Menu(cx: Scope) -> Element {
 pub fn MenuButton<'a>(cx: Scope<'a>, page: Page) -> Element<'a> {
     let active_page = use_shared_state::<Page>(cx).unwrap();
     let text = format!("{:?}", page);
-    println!("Rendering menu button: {:?}", page);
-    cx.render(rsx!{
+
+    let active = *active_page.read() == page;
+
+    let button = rsx!{
         button {
             class: "pure-button",
-            margin: "0.5em",
+            style: "margin: 0.25em; margin-bottom: 0.5em; margin-top: 0.25em; height: 3em; visibility: visible; width: 8em; font-weight: bold;",
             onclick: move |_event| {
-                println!("Clicked menu button: {:?}", page);
-                //active_page.write() = page;
+                if !active {
+                    *active_page.write() = page;
+                }
             },
             "{text}",
         }
-    })
+    };
+
+    let visibility = if active { "visible" } else { "hidden" };
+
+    cx.render(
+        rsx!{
+            div {
+                class: "box",
+                style: r"
+                    display: flex;
+                    flex-direction: row;
+                    margin: 0;
+                    margin-top: 0.25em;
+                    margin-bottom: -2px;
+                    border-bottom-left-radius: 0;
+                    border-bottom-right-radius: 0;
+                    border-width: 0.16em;
+                    border-bottom: none;
+                    background-color: #A4A6A5;
+                    visibility: {visibility};
+                ",
+                button,
+            }
+        }
+    )
 }

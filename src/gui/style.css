@@ -1,0 +1,29 @@
+.pure-button {
+    border-radius: 5px;
+    border: solid 1px gray;
+}
+
+.box {
+    border: solid 1px gray;
+    border-radius: 5px;
+    background-color: lightgray;
+    margin: 1em;
+}
+
+.black {
+    background-color: black;
+    color: white;
+}
+
+.white {
+    background-color: white;
+}
+
+.pure-button:hover {
+    background-color: #e0e0e0;
+}
+
+.pure-button:hover, .pure-button:focus, .pure-button, .pure-button:active {
+    background-image: none;
+    color: black;
+}
