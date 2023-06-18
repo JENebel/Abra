@@ -1,29 +1,25 @@
 use super::*;
 
 pub fn Game(cx: Scope, interactible: bool) -> Element {
-    let layout_box = r"
-        display: flex;
-        margin: 0;
-        padding: 0;
-    ";
-
-    let panel_style = r"
-        display: inline-block;
-        height: 100%;
-        margin: 0.5em;
-    ";
 
     cx.render(rsx!{
+        // Container
         div {
-            style: "{layout_box} ",
+            style: r"
+                display: flex;
+                flex-flow: row;
+                height: 100%;
+                flex: 1;
+                background-color: #A4A6A5;
+                overflow: hidden;
+            ",
 
+            // Menu
             div {
-                style: "{panel_style} width: 100%;",
-                padding: "1.6em",
-            },
-            div {
-                style: "{panel_style} min-width: 35em;",
-                padding: "1.6em",
+                style: "
+                    height: 100%;
+                    min-width: 35em; 
+                ",
 
                 div {
                     // If interactible show the play/pause, cancel, adjudicate and new buttons on a row in a rounded box
@@ -124,6 +120,18 @@ pub fn Game(cx: Scope, interactible: bool) -> Element {
                     }
                 }
             },
+            div {
+                style: "
+                    flex: 1;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                    margin: 1em;
+                ",
+                id: "board_container",
+                Board(cx)
+            }
         }
     })
 }

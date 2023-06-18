@@ -11,3 +11,4 @@ description = "Chess GUI with a focus on engine testing tournaments"
 #chess = "3.2.0"
 dioxus = { git = "https://github.com/DioxusLabs/dioxus" }
 dioxus-desktop = { git = "https://github.com/DioxusLabs/dioxus" }
+dioxus-web = { git = "https://github.com/DioxusLabs/dioxus" }

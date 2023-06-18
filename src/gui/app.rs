@@ -36,12 +36,32 @@ fn App(cx: Scope) -> Element {
         },
 
         body {
-            style: "min-height: 100vh; background-color: #ededed;",
+            style: r"
+                display: flex;
+                flex-flow: column;
+                min-height: 100vh;
+                max-height: 100vh;
+                background-color: #ededed;
+                box-sizing: border-box;
+                margin: 0; border:
+                padding: 0;
+                overflow: hidden;
+            ",
+            
             div {
-                style: "min-height: 100%; width: 100%; margin: 0; padding: 0;",
+                style: r"
+                    display: flex;
+                    flex-flow: column;
+                    flex: 1;
+                    height: 100%;
+                    width: 100%;
+                    margin: 0;
+                    padding: 0;
+                ",
+
                 Menu(cx),
                 match *page.read() {
-                    Page::Play => PlayPage(cx),
+                    Page::Play => Game(cx, true),
                     Page::Tourney => TourneyPage(cx),
                     _ => render!{ p { "Not implemented yet" } }
                 }

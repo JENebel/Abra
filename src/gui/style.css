@@ -27,5 +27,5 @@
 }
 
 .pure-button:active {
-    border-width: 2px;
+    background-color: #c9c9c9;
 }
