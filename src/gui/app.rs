@@ -1,10 +1,12 @@
+use std::collections::HashMap;
+
 use dioxus_desktop::{WindowBuilder, LogicalSize};
 
 use super::*;
 
 pub fn start_gui() {
     let window = WindowBuilder::new()
-        .with_title(format!("Pocus {}", PKG_VERSION))
+        .with_title(format!("Pocus {PKG_VERSION}"))
         .with_inner_size(LogicalSize::new(1400, 1000));
 
     dioxus_desktop::launch_cfg(App, dioxus_desktop::Config::new().with_window(window));
@@ -21,8 +23,10 @@ pub enum Page {
 }
 
 fn App(cx: Scope) -> Element {
-    use_shared_state_provider(cx, || Page::Play);
+    use_shared_state_provider(cx, || Page::Engines);
     let page = use_shared_state::<Page>(cx).unwrap();
+    let _engines = use_shared_state::<HashMap<u32, Engine>>(cx).unwrap();
+    *_engines.write() = load_all_engines().unwrap();
     
     cx.render(rsx!{
         link { 
@@ -63,6 +67,7 @@ fn App(cx: Scope) -> Element {
                 match *page.read() {
                     Page::Play => Game(cx, true),
                     Page::Tourney => TourneyPage(cx),
+                    Page::Engines => Engines(cx),
                     _ => render!{ p { "Not implemented yet" } }
                 }
             }

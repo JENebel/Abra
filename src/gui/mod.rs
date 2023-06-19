@@ -9,9 +9,11 @@ mod menu;
 mod game;
 mod tourney_page;
 mod board;
+mod engines;
 
 pub use app::*;
 use menu::*;
 use tourney_page::*;
 use game::*;
 use board::*;
+use engines::*;

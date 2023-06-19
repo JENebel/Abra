@@ -25,7 +25,7 @@ pub fn interface_loop() {
         match cmd_name {
             "q" | "x" | "quit" | "exit" => quit(),
             "launch" => {
-                match EngineWrapper::launch() {
+                match EngineWrapper::launch(Engine { path: "".to_string(), ..Default::default() }) {
                     Ok(mut engine) => {
                         println!("Engine launched");
                         engine.send("go movetime 2000");

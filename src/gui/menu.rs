@@ -48,9 +48,10 @@ pub fn MenuButton<'a>(cx: Scope<'a>, page: Page) -> Element<'a> {
                     flex-direction: row;
                     margin: 0;
                     margin-top: 0.25em;
-                    margin-bottom: -2px;
+                    box-sizing: border-box;
                     border-bottom-left-radius: 0;
                     border-bottom-right-radius: 0;
+                    margin-bottom: -0.16em;
                     border-width: 0.16em;
                     border-bottom: none;
                     background-color: #A4A6A5;

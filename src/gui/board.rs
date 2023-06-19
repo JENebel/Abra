@@ -11,8 +11,7 @@ pub fn Board(cx: Scope) -> Element {
                 margin: auto;
                 flex: 1;
                 aspect-ratio: 1 / 1;
-                border: 3px solid black;
-                border-radius: 0.5em;
+                border: 3px solid gray;
             ",
 
             // Render chess board cells
