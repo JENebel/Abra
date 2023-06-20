@@ -27,6 +27,7 @@ fn EngineListItem<'a>(cx: Scope<'a>, engine: Engine, engines: &'a UseSharedState
                 height: 2.2em;
                 {background}
                 cursor: context-menu;
+                overflow: hidden;
             ",
 
             onclick: move |_event| { 
@@ -34,20 +35,41 @@ fn EngineListItem<'a>(cx: Scope<'a>, engine: Engine, engines: &'a UseSharedState
             },
 
             p { 
-                style: "align-self: flex-start; margin: 0;",
+                style: "align-self: flex-start; margin: 0; font-weight: bold;",
                 "{engine.alias}"
             },
 
-            p {
-                style: "align-self: flex-end; font-weight: bold; color: red; margin: 0; cursor: pointer;",
+            div {
+                style: "self-align: flex-end; display: flex; flex-flow: row;",
 
-                onclick: move |_event| {
-                    remove_engine(engine.id).unwrap();
-                    engines.write().remove(&engine.id);
-                    *selected_engine.write() = SelectedEngine::None;
-                },
+                p {
+                    style: r"
+                        font-size: 0.5em;
+                        text-align: center;
+                        margin-right: 2em;
+                        margin-top: 0.5em;
+                        height: 100%;
+                    ",
 
-                "X"
+                    "{engine.name}"
+                }
+
+                p {
+                    style: r"
+                        font-weight: bold;
+                        color: red;
+                        cursor: pointer;
+                        margin: 0;
+                    ",
+
+                    onclick: move |_event| {
+                        remove_engine(engine.id).unwrap();
+                        engines.write().remove(&engine.id);
+                        *selected_engine.write() = SelectedEngine::None;
+                    },
+
+                    "X"
+                }
             }
         }
     })
@@ -55,6 +77,9 @@ fn EngineListItem<'a>(cx: Scope<'a>, engine: Engine, engines: &'a UseSharedState
 
 pub fn Engines(cx: Scope) -> Element {
     let engines = use_shared_state::<HashMap<u32, Engine>>(cx).unwrap();
+
+    let mut sorted_engines: Vec<Engine> = engines.read().values().cloned().collect::<Vec<Engine>>();
+    sorted_engines.sort_by(|a, b| a.alias.cmp(&b.alias));
 
     cx.render(rsx!{
         // Container
@@ -107,7 +132,7 @@ pub fn Engines(cx: Scope) -> Element {
                         margin: 1em;
                     ",
 
-                    for engine in engines.read().values() {
+                    for engine in sorted_engines {
                         EngineListItem(cx, engine.clone(), engines)
                     }
                 }

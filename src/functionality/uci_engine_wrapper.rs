@@ -27,6 +27,7 @@ impl EngineWrapper {
         loop {
             match engine.receive() {
                 Output(output) => {
+                    let output = output.trim();
                     if output.starts_with("id name") {
                         name = output.split("id name ").nth(1).unwrap().to_string();
                     } else if output.starts_with("id author") {
@@ -52,6 +53,7 @@ impl EngineWrapper {
                             }
                             option.vars = vars;
                         }
+                        option.value = option.default.clone();
                         options.push(option);
                     }
                     else if output.contains("uciok") {
