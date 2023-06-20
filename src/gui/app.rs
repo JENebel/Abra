@@ -54,7 +54,7 @@ fn App(cx: Scope) -> Element {
                 max-height: 100vh;
                 background-color: #ededed;
                 box-sizing: border-box;
-                margin: 0; border:
+                margin: 0;
                 padding: 0;
                 overflow: hidden;
             ",
@@ -64,7 +64,8 @@ fn App(cx: Scope) -> Element {
                     display: flex;
                     flex-flow: column;
                     flex: 1;
-                    height: 100%;
+                    min-height: 100%;
+                    max-height: 100%;
                     width: 100%;
                     margin: 0;
                     padding: 0;

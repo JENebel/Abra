@@ -22,12 +22,13 @@ fn EngineListItem<'a>(cx: Scope<'a>, engine: Engine, engines: &'a UseSharedState
                 display: flex;
                 flex-flow: row;
                 justify-content: space-between;
-                margin: 0;
                 font-size: 1.5em;
                 height: 2.2em;
                 {background}
                 cursor: context-menu;
                 overflow: hidden;
+                margin: 0.5;
+                margin-bottom: 0.21em;
             ",
 
             onclick: move |_event| { 
@@ -55,14 +56,13 @@ fn EngineListItem<'a>(cx: Scope<'a>, engine: Engine, engines: &'a UseSharedState
                 }
 
                 p {
+                    class: "x",
                     style: r"
-                        font-weight: bold;
-                        color: red;
-                        cursor: pointer;
                         margin: 0;
                     ",
 
-                    onclick: move |_event| {
+                    onclick: move |event| {
+                        event.stop_propagation();
                         remove_engine(engine.id).unwrap();
                         engines.write().remove(&engine.id);
                         *selected_engine.write() = SelectedEngine::None;
@@ -88,16 +88,20 @@ pub fn Engines(cx: Scope) -> Element {
                 display: flex;
                 flex-flow: row;
                 height: 100%;
+                max-height: 100%;
                 flex: 1;
                 background-color: #A4A6A5;
-                overflow: hidden;
+                overflow: auto;
             ",
 
             // Engine list
             div {
                 style: "
-                    height: 100%;
+                    min-height: 100%;
+                    max-height: 100%;
                     min-width: 35em;
+                    padding: 0.5em;
+                    padding-bottom: 8em;
                 ",
 
                 div {
@@ -123,13 +127,12 @@ pub fn Engines(cx: Scope) -> Element {
 
                 // The list
                 div {
+                    class: "box",
                     style: r"
-                        display: flex;
-                        flex-flow: column;
+                        flow-direction: column;
                         height: 100%;
-                        flex: 1;
-                        background-color: #A4A6A5;
-                        margin: 1em;
+                        padding: 0.5em;
+                        overflow-y: scroll;
                     ",
 
                     for engine in sorted_engines {

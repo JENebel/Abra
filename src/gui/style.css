@@ -29,3 +29,19 @@
 .pure-button:active {
     background-color: #c9c9c9;
 }
+
+.x {
+    font-weight: bold;
+    color: rgb(187, 12, 12);
+    cursor: pointer;
+    pointer-events: all;
+    display: block;
+}
+
+.x:hover {
+    color: #630404;
+}
+
+.x:active {
+    color: #1f0000;
+}

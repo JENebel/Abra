@@ -108,18 +108,13 @@ impl EngineWrapper {
 
         // Reader thread
         thread::spawn(move || {
-            let mut reader = BufReader::new(stdout);
-            loop {
-                let mut buf = String::new();
-                match reader.read_line(&mut buf) {
-                    Ok(_) => {
-                        let _ = out_tx.send(Output(buf));
-                        continue;
-                    }
-                    Err(_) => {
-                        let _ = out_tx.send(Crash(format!("Engine with pid {id} crashed!")));
-                        break;
-                    }
+            let reader = BufReader::new(stdout);
+            for line in reader.lines() {
+                if let Ok(line) = line {
+                    out_tx.send(Message::Output(line)).expect("Failed to send stdout line through channel");
+                } else {
+                    out_tx.send(Message::Crash(format!("Engine with pid {id} crashed!"))).expect("Failed to send crash message through channel");
+                    break;
                 }
             }
         });
@@ -135,7 +130,8 @@ impl EngineWrapper {
                         }
                     }
                     Err(_) => {
-                        let _ =out_tx1.send(Crash(format!("Engine with pid {id} crashed!")));
+                        let _ = out_tx1.send(Crash(format!("Engine with pid {id} crashed!")));
+                        break;
                     }
                 }
             }
@@ -155,17 +151,11 @@ impl EngineWrapper {
 
     pub fn quit(&mut self) {
         self.send("quit");
-        let before = std::time::Instant::now();
-        loop {
-            if let Ok(Some(status)) = self.child.try_wait() {
-                println!("Exited correctly with {status}");
-                break;
-            }
-            if before.elapsed().as_millis() > 500 {
-                self.child.kill().unwrap();
-                println!("Engine did not quit gracefully in less than 500 ms, and was force killed.");
-                break;
-            }
+        self.child.wait().unwrap();
+        if let Ok(Some(status)) = self.child.try_wait() {
+            println!("Exited correctly with {status}");
+        } else {
+            println!("Exited incorrectly");
         }
     }
 

@@ -12,6 +12,8 @@ pub fn Board(cx: Scope) -> Element {
                 flex: 1;
                 aspect-ratio: 1 / 1;
                 border: 3px solid gray;
+                font-size: 5em;
+                font-weight: bold;
             ",
 
             // Render chess board cells
@@ -19,7 +21,14 @@ pub fn Board(cx: Scope) -> Element {
                 for col in 0..8 {
                     render! {
                         div {
+                            style: r"
+                                justify-content: center;
+                                display: flex;
+                                align-items: center;
+                            ",
                             background_color: if (row + col) % 2 == 0 { "Beige" } else { "SaddleBrown" },
+
+                            "♞"
                         }
                     }
                 }
