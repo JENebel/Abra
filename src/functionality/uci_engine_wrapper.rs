@@ -17,7 +17,8 @@ pub struct EngineWrapper {
 
 impl EngineWrapper {
     pub fn get_info(path: String) -> Result<Engine, String> {
-        let engine = EngineWrapper::launch(Engine { path: path.clone(), ..Default::default() })?;
+        println!("Getting info from engine: {}", path);
+        let mut engine = EngineWrapper::launch(Engine { path: path.clone(), ..Default::default() })?;
         engine.send("uci");
         let mut name = "Unknown".to_string();
         let mut author = "Unknown".to_string();
@@ -30,18 +31,23 @@ impl EngineWrapper {
                         name = output.split("id name ").nth(1).unwrap().to_string();
                     } else if output.starts_with("id author") {
                         author = output.split("id author ").nth(1).unwrap().to_string();
+                    } else if output.starts_with("option name Clear Hash type button") {
+                        let mut option = UCIOption::default();
+                        option.name = "Clear Hash".to_string();
+                        option.opt_type = "button".to_string();
+                        options.push(option);
                     } else if output.starts_with("option") {
                         let mut option = UCIOption::default();
                         let mut parts = output.split(" ");
                         option.name = parts.nth(2).unwrap().to_string();
-                        option.opt_type = parts.nth(4).unwrap().to_string();
-                        option.default = parts.nth(6).unwrap().to_string();
+                        option.opt_type = parts.nth(1).unwrap().to_string();
+                        option.default = parts.nth(1).unwrap().to_string();
                         if option.opt_type == "spin" {
-                            option.min = parts.nth(8).unwrap().to_string();
-                            option.max = parts.nth(10).unwrap().to_string();
+                            option.min = parts.nth(1).unwrap().to_string();
+                            option.max = parts.nth(1).unwrap().to_string();
                         } else if option.opt_type == "combo" {
                             let mut vars = Vec::new();
-                            for var in parts.skip(7).step_by(2) {
+                            for var in parts.step_by(2) {
                                 vars.push(var.to_string());
                             }
                             option.vars = vars;
@@ -55,6 +61,8 @@ impl EngineWrapper {
                 Crash(error) => return Err(error),
             }
         }
+
+        engine.quit();
 
         Ok(Engine {
             id: 0,

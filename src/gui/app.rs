@@ -22,11 +22,18 @@ pub enum Page {
     Info,
 }
 
+pub enum SelectedEngine {
+    None,
+    Engine(u32),
+}
+
+pub type EngineMap = HashMap<u32, Engine>;
+
 fn App(cx: Scope) -> Element {
     use_shared_state_provider(cx, || Page::Engines);
+    use_shared_state_provider(cx, || load_all_engines().unwrap());
+    use_shared_state_provider(cx, || SelectedEngine::None);
     let page = use_shared_state::<Page>(cx).unwrap();
-    let _engines = use_shared_state::<HashMap<u32, Engine>>(cx).unwrap();
-    *_engines.write() = load_all_engines().unwrap();
     
     cx.render(rsx!{
         link { 
