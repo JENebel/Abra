@@ -8,12 +8,11 @@ pub fn Board(cx: Scope) -> Element {
                 display: grid;
                 grid-template-columns: repeat(8, 1fr);
                 grid-template-rows: repeat(8, 1fr);
-                margin: auto;
-                flex: 1;
                 aspect-ratio: 1 / 1;
                 border: 3px solid gray;
                 font-size: 5em;
                 font-weight: bold;
+                max-height: 100%;
             ",
 
             // Render chess board cells
@@ -28,7 +27,7 @@ pub fn Board(cx: Scope) -> Element {
                             ",
                             background_color: if (row + col) % 2 == 0 { "Beige" } else { "SaddleBrown" },
 
-                            "♞"
+                            
                         }
                     }
                 }

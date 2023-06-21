@@ -122,12 +122,8 @@ pub fn Game(cx: Scope, interactible: bool) -> Element {
             },
             div {
                 style: "
-                    flex: 1;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100%;
                     margin: 1em;
+                    width: 100%;
                 ",
                 id: "board_container",
                 Board(cx)

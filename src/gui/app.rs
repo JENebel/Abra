@@ -7,7 +7,8 @@ use super::*;
 pub fn start_gui() {
     let window = WindowBuilder::new()
         .with_title(format!("Pocus {PKG_VERSION}"))
-        .with_inner_size(LogicalSize::new(1400, 1000));
+        .with_inner_size(LogicalSize::new(1500, 1000))
+        .with_min_inner_size(LogicalSize::new(1300, 600));
 
     dioxus_desktop::launch_cfg(App, dioxus_desktop::Config::new().with_window(window));
 }
