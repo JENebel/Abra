@@ -1,5 +1,5 @@
 use super::*;
-use std::{process::{Child, Command, Stdio}, io::{BufReader, Write, BufRead}, thread, sync::mpsc::{Receiver, Sender, channel}};
+use std::{process::{Child, Command, Stdio}, io::{BufReader, Write, BufRead}, thread, sync::mpsc::{Receiver, Sender, channel}, path::PathBuf};
 
 pub enum Message {
     Output(String),
@@ -16,8 +16,8 @@ pub struct EngineWrapper {
 }
 
 impl EngineWrapper {
-    pub fn get_info(path: String) -> Result<Engine, String> {
-        println!("Getting info from engine: {}", path);
+    pub fn get_info(path: PathBuf) -> Result<Engine, String> {
+        println!("Getting info from engine: {}", path.as_path().display());
         let mut engine = EngineWrapper::launch(Engine { path: path.clone(), ..Default::default() })?;
         engine.send("uci");
         let mut name = "Unknown".to_string();

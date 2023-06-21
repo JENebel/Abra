@@ -25,7 +25,7 @@ fn EngineListItem<'a>(cx: Scope<'a>, engine: Engine, engines: &'a UseSharedState
                 font-size: 1.5em;
                 height: 2.2em;
                 {background}
-                cursor: context-menu;
+                cursor: default;
                 overflow: hidden;
                 margin: 0.5;
                 margin-bottom: 0.21em;
@@ -111,16 +111,25 @@ pub fn Engines(cx: Scope) -> Element {
                         class: "pure-button",
 
                         onclick: move |_event| { 
-                            let mut engine = EngineWrapper::get_info("C:/Users/Joachim/VSCode Projects/Cadabra/target/release/cadabra.exe".to_string()).unwrap();
+                            let mut id;
                             loop {
-                                engine.id = rand::random::<u32>();
-                                if !engines.read().contains_key(&engine.id) {
+                                id = rand::random::<u32>();
+                                if !engines.read().contains_key(&id) {
                                     break;
                                 }
                             }
-                            store_engine(&engine).unwrap();
-                            (engines.write()).insert(engine.id, engine);
+
+                            match install_engine(id) {
+                                Ok(engine) => {
+                                    engines.write().insert(engine.id, engine);
+                                },
+                                Err(err) => {
+                                    println!("Could not install engine: {}", err);
+                                    return;
+                                }
+                            }
                         },
+
                         "Install new"
                     },
                 },

@@ -1,5 +1,7 @@
 use std::{collections::HashMap, fs};
 
+use native_dialog::FileDialog;
+
 use super::*;
 
 const ENGINE_FOLDER: &str = "./engines/";
@@ -14,8 +16,6 @@ pub fn init_directories() -> Result<(), String> {
 
 pub fn load_all_engines() -> Result<HashMap<u32, Engine>, String> {
     let mut engines: HashMap<u32, Engine> = HashMap::new();
-
-    println!("Loading engines...");
 
     // Load all engines in the engines folder
     let paths = fs::read_dir(ENGINE_FOLDER).unwrap();
@@ -52,4 +52,22 @@ pub fn store_engine(engine: &Engine) -> Result<(), String> {
 pub fn remove_engine(id: u32) -> Result<(), String> {
     fs::remove_file(format!("{}{}.json", ENGINE_FOLDER, id)).unwrap();
     Ok(())
+}
+
+pub fn install_engine(new_id: u32) -> Result<Engine, String> {
+    let path = match FileDialog::new()
+        .show_open_single_file() {
+            Ok(p) => match p {
+                Some(p) => p,
+                None => return Err("No file selected!".to_string()),
+            },
+            Err(_) => return Err("Could not open file dialog!".to_string()),
+    };
+
+    let mut engine = EngineWrapper::get_info(path)?;
+    engine.id = new_id;
+
+    store_engine(&engine).unwrap();
+
+    Ok(engine)
 }
