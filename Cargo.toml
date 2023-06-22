@@ -1,5 +1,5 @@
 [package]
-name = "pocus"
+name = "abra"
 version = "0.1.0"
 authors = ["Joachim Enggaard Nebel"]
 edition = "2021"
@@ -8,10 +8,8 @@ description = "Chess GUI with a focus on engine testing tournaments"
 
 
 [dependencies]
-#chess = "3.2.0"
 dioxus = { git = "https://github.com/DioxusLabs/dioxus" }
 dioxus-desktop = { git = "https://github.com/DioxusLabs/dioxus" }
-#dioxus-web = { git = "https://github.com/DioxusLabs/dioxus" }
 serde = "1.0.164"
 serde_json = "1.0.97"
 rand = "0.8.5"

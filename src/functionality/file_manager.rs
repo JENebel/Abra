@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fs};
+use std::{collections::HashMap, fs, path::PathBuf};
 
 use native_dialog::FileDialog;
 
@@ -54,7 +54,7 @@ pub fn remove_engine(id: u32) -> Result<(), String> {
     Ok(())
 }
 
-pub fn install_engine(new_id: u32) -> Result<Engine, String> {
+pub fn open_file_dialog() -> Result<PathBuf, String> {
     let path = match FileDialog::new()
         .show_open_single_file() {
             Ok(p) => match p {
@@ -63,6 +63,12 @@ pub fn install_engine(new_id: u32) -> Result<Engine, String> {
             },
             Err(_) => return Err("Could not open file dialog!".to_string()),
     };
+
+    Ok(path)
+}
+
+pub fn install_engine(new_id: u32) -> Result<Engine, String> {
+    let path = open_file_dialog()?;
 
     let mut engine = EngineWrapper::get_info(path)?;
     engine.id = new_id;

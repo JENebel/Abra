@@ -45,3 +45,7 @@
 .x:active {
     color: #1f0000;
 }
+
+.file:hover {
+    cursor: pointer;
+}

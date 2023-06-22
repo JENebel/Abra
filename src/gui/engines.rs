@@ -27,8 +27,9 @@ fn EngineListItem<'a>(cx: Scope<'a>, engine: Engine, engines: &'a UseSharedState
                 {background}
                 cursor: default;
                 overflow: hidden;
-                margin: 0.5;
-                margin-bottom: 0.21em;
+                margin-top: 0.25em;
+                margin-bottom: 0.5em;
+                max-width: 25em;
             ",
 
             onclick: move |_event| { 
@@ -47,7 +48,7 @@ fn EngineListItem<'a>(cx: Scope<'a>, engine: Engine, engines: &'a UseSharedState
                     style: r"
                         font-size: 0.5em;
                         text-align: center;
-                        margin-right: 2em;
+                        margin-right: 1em;
                         margin-top: 0.5em;
                         height: 100%;
                     ",
@@ -81,6 +82,11 @@ pub fn Engines(cx: Scope) -> Element {
     let mut sorted_engines: Vec<Engine> = engines.read().values().cloned().collect::<Vec<Engine>>();
     sorted_engines.sort_by(|a, b| a.alias.cmp(&b.alias));
 
+    let selected_id = match *use_shared_state::<SelectedEngine>(cx).unwrap().read() {
+        SelectedEngine::Engine(id) => Some(id),
+        _ => None
+    };
+
     cx.render(rsx!{
         // Container
         div {
@@ -91,7 +97,6 @@ pub fn Engines(cx: Scope) -> Element {
                 max-height: 100%;
                 flex: 1;
                 background-color: #A4A6A5;
-                overflow: auto;
             ",
 
             // Engine list
@@ -99,15 +104,15 @@ pub fn Engines(cx: Scope) -> Element {
                 style: "
                     min-height: 100%;
                     max-height: 100%;
-                    min-width: 35em;
+                    width: 35em;
                     padding: 0.5em;
-                    padding-bottom: 8em;
+                    padding-bottom: 5.7em;
                 ",
 
                 div {
                     style: "display: flex; flex-direction: row; justify-content: center;",
                     button {
-                        style: "margin-top: 1.5em;",
+                        style: "margin-top: 0.5em; height: 2.2em;",
                         class: "pure-button",
 
                         onclick: move |_event| { 
@@ -152,6 +157,13 @@ pub fn Engines(cx: Scope) -> Element {
             // Engine info & settings
             div {
                 class: "box",
+                style: r"
+                    flex: 1;
+                    min-height: 100%;
+                    width: 100%;
+                ",
+
+                EngineInfo(cx, selected_id),
             }
         }
     })
