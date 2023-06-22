@@ -23,6 +23,7 @@ pub enum Page {
     Info,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum SelectedEngine {
     None,
     Engine(u32),

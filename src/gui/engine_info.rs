@@ -1,8 +1,10 @@
+use std::collections::HashMap;
+
 use super::*;
 
-pub fn EngineInfo(cx: Scope, id: Option<u32>) -> Element {
-    let engines = use_shared_state::<EngineMap>(cx).unwrap();
-    let engine = match id {
+pub fn EngineInfo<'a>(cx: Scope<'a>, id: Option<u32>, engines: &'a UseSharedState<HashMap<u32, Engine>>) -> Element<'a> {
+    //let engines = use_shared_state::<EngineMap>(cx).unwrap();
+    let engine:Option<Engine> = match id {
         None => None,
         Some(id) => engines.read().get(&id).cloned(),
     };
@@ -100,7 +102,9 @@ pub fn EngineInfo(cx: Scope, id: Option<u32>) -> Element {
                         value: "{engine.elo}",
                         oninput: move |event| {
                             match event.inner().value.to_string().parse::<u32>() {
-                                Ok(elo) => engines.write().get_mut(&engine.id).unwrap().elo = elo,
+                                Ok(elo) => {
+                                    engines.write().get_mut(&engine.id).unwrap().elo = elo
+                                },
                                 Err(_) => println!("Invalid Elo"),
                             }
                         }

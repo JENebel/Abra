@@ -51,6 +51,9 @@ fn EngineListItem<'a>(cx: Scope<'a>, engine: Engine, engines: &'a UseSharedState
                         margin-right: 1em;
                         margin-top: 0.5em;
                         height: 100%;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     ",
 
                     "{engine.name}"
@@ -66,7 +69,10 @@ fn EngineListItem<'a>(cx: Scope<'a>, engine: Engine, engines: &'a UseSharedState
                         event.stop_propagation();
                         remove_engine(engine.id).unwrap();
                         engines.write().remove(&engine.id);
-                        *selected_engine.write() = SelectedEngine::None;
+                        let selected = *selected_engine.read();
+                        if selected == SelectedEngine::Engine(engine.id) {
+                            *selected_engine.write() = SelectedEngine::None;
+                        }
                     },
 
                     "X"
@@ -82,7 +88,9 @@ pub fn Engines(cx: Scope) -> Element {
     let mut sorted_engines: Vec<Engine> = engines.read().values().cloned().collect::<Vec<Engine>>();
     sorted_engines.sort_by(|a, b| a.alias.cmp(&b.alias));
 
-    let selected_id = match *use_shared_state::<SelectedEngine>(cx).unwrap().read() {
+    let selected_engine = use_shared_state::<SelectedEngine>(cx).unwrap();
+
+    let selected_id = match *selected_engine.read() {
         SelectedEngine::Engine(id) => Some(id),
         _ => None
     };
@@ -126,7 +134,10 @@ pub fn Engines(cx: Scope) -> Element {
 
                             match install_engine(id) {
                                 Ok(engine) => {
+                                    println!("Installed engine: {}", engine.alias);
+                                    let id = engine.id;
                                     engines.write().insert(engine.id, engine);
+                                    *selected_engine.write() = SelectedEngine::Engine(id);
                                 },
                                 Err(err) => {
                                     println!("Could not install engine: {}", err);
@@ -163,7 +174,7 @@ pub fn Engines(cx: Scope) -> Element {
                     width: 100%;
                 ",
 
-                EngineInfo(cx, selected_id),
+                EngineInfo(cx, selected_id, engines),
             }
         }
     })
