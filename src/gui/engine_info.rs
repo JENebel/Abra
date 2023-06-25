@@ -88,7 +88,10 @@ pub fn EngineInfo<'a>(cx: Scope<'a>, id: Option<u32>, engines: &'a UseSharedStat
                         style: input_box_style,
                         value: "{engine.alias}",
                         oninput: move |event| {
-                            engines.write().get_mut(&engine.id).unwrap().alias = event.inner().value.to_string();
+                            let mut engines = engines.write();
+                            let engine = engines.get_mut(&engine.id).unwrap();
+                            engine.alias = event.inner().value.to_string();
+                            store_engine(engine).unwrap();
                         }
                     }
                 },
@@ -103,7 +106,10 @@ pub fn EngineInfo<'a>(cx: Scope<'a>, id: Option<u32>, engines: &'a UseSharedStat
                         oninput: move |event| {
                             match event.inner().value.to_string().parse::<u32>() {
                                 Ok(elo) => {
-                                    engines.write().get_mut(&engine.id).unwrap().elo = elo
+                                    let mut engines = engines.write();
+                                    let engine = engines.get_mut(&engine.id).unwrap();
+                                    engine.elo = elo;
+                                    store_engine(engine).unwrap();
                                 },
                                 Err(_) => println!("Invalid Elo"),
                             }
@@ -145,7 +151,9 @@ pub fn EngineInfo<'a>(cx: Scope<'a>, id: Option<u32>, engines: &'a UseSharedStat
                                 Err(_) => return,
                                 Ok(p) => p,
                             };
-                            engines.get_mut(&engine.id).unwrap().path = path;
+                            let engine = engines.get_mut(&engine.id).unwrap();
+                            engine.path = path;
+                            store_engine(engine).unwrap();
                         },
 
                         "📂"
