@@ -8,7 +8,7 @@ pub fn Menu(cx: Scope) -> Element {
             background: "lightgray",
             border_bottom: "solid 0.16em gray",
 
-            MenuButton(cx, Page::Play),
+            MenuButton(cx, Page::Game),
             MenuButton(cx, Page::Tourney),
             MenuButton(cx, Page::Engines),
             MenuButton(cx, Page::Editor),

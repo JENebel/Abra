@@ -27,9 +27,8 @@ fn EngineListItem<'a>(cx: Scope<'a>, engine: Engine, engines: &'a UseSharedState
                 {background}
                 cursor: default;
                 overflow: hidden;
-                margin-top: 0.25em;
-                margin-bottom: 0.5em;
                 max-width: 25em;
+                margin-bottom: 0.5em;
             ",
 
             onclick: move |_event| { 
@@ -37,7 +36,7 @@ fn EngineListItem<'a>(cx: Scope<'a>, engine: Engine, engines: &'a UseSharedState
             },
 
             p { 
-                style: "align-self: flex-start; margin: 0; font-weight: bold;",
+                style: "align-self: flex-start; margin: 0;",
                 "{engine.alias}"
             },
 
@@ -98,67 +97,58 @@ pub fn Engines(cx: Scope) -> Element {
     cx.render(rsx!{
         // Container
         div {
-            style: r"
-                display: flex;
-                flex-flow: row;
-                height: 100%;
-                max-height: 100%;
-                flex: 1;
-                background-color: #A4A6A5;
-            ",
+            class: "page",
 
             // Engine list
             div {
-                style: "
-                    min-height: 100%;
-                    max-height: 100%;
-                    width: 35em;
-                    padding: 0.5em;
-                    padding-bottom: 5.7em;
-                ",
+                class: "side-panel box",
 
-                div {
-                    style: "display: flex; flex-direction: row; justify-content: center;",
-                    button {
-                        style: "margin-top: 0.5em; height: 2.2em;",
-                        class: "pure-button",
-
-                        onclick: move |_event| { 
-                            let mut id;
-                            loop {
-                                id = rand::random::<u32>();
-                                if !engines.read().contains_key(&id) {
-                                    break;
-                                }
-                            }
-
-                            match install_engine(id) {
-                                Ok(engine) => {
-                                    println!("Installed engine: {}", engine.alias);
-                                    let id = engine.id;
-                                    engines.write().insert(engine.id, engine);
-                                    *selected_engine.write() = SelectedEngine::Engine(id);
-                                },
-                                Err(err) => {
-                                    println!("Could not install engine: {}", err);
-                                    return;
-                                }
-                            }
-                        },
-
-                        "Install new"
-                    },
-                },
+                p {
+                    style: "font-size: 1.5em; margin: 0.5em; font-weight: bold; text-align: center;",
+                    "Installed Engines"
+                }
 
                 // The list
                 div {
-                    class: "box",
                     style: r"
                         flow-direction: column;
                         height: 100%;
-                        padding: 0.5em;
+                        padding: 1em;
                         overflow-y: scroll;
                     ",
+
+                    div {
+                        style: "display: flex; flex-direction: row; justify-content: center;",
+                        button {
+                            style: "height: 2.2em; margin-bottom: 1em;",
+                            class: "pure-button",
+    
+                            onclick: move |_event| { 
+                                let mut id;
+                                loop {
+                                    id = rand::random::<u32>();
+                                    if !engines.read().contains_key(&id) {
+                                        break;
+                                    }
+                                }
+    
+                                match install_engine(id) {
+                                    Ok(engine) => {
+                                        println!("Installed engine: {}", engine.alias);
+                                        let id = engine.id;
+                                        engines.write().insert(engine.id, engine);
+                                        *selected_engine.write() = SelectedEngine::Engine(id);
+                                    },
+                                    Err(err) => {
+                                        println!("Could not install engine: {}", err);
+                                        return;
+                                    }
+                                }
+                            },
+    
+                            "Install new"
+                        },
+                    },
 
                     for engine in sorted_engines {
                         EngineListItem(cx, engine.clone(), engines)
@@ -166,16 +156,7 @@ pub fn Engines(cx: Scope) -> Element {
                 }
             },
             // Engine info & settings
-            div {
-                class: "box",
-                style: r"
-                    flex: 1;
-                    min-height: 100%;
-                    width: 100%;
-                ",
-
-                EngineInfo(cx, selected_id, engines),
-            }
+            EngineInfo(cx, selected_id, engines),
         }
     })
 }

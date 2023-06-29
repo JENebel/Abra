@@ -32,126 +32,131 @@ pub fn EngineInfo<'a>(cx: Scope<'a>, id: Option<u32>, engines: &'a UseSharedStat
         self-align: flex-start;
     ";
 
-    match engine {
-        None => cx.render(rsx!{ div {
-            style: "padding: 3em; font-weight: bold; font-size: 1.5",
-            "No engine selected"
-        }}),
-        Some(engine) => cx.render(rsx!{
-            // Container
-            div {
-                style: r"
-                    display: flex;
-                    flex-flow: column;
-                    margin: 0.5em;
-                    padding: 0.5em;
-                    width: 50em;
-                ",
+    cx.render(rsx!{
+        div {
+            class: "box",
+            style: r"
+                flex: 1;
+                min-height: 100%;
+                max-height: 100%;
+                overflow: scroll;
+                padding-left: 1em;
+                padding-right: 1em;
+            ",
 
-                // Buttons
-                div {
-                    
-                },
-
-                p { 
-                    style: r"
-                        font-weight: bold;
-                        font-size: 2em;
-                        margin-top: 0;
-                    ",
-
-                    "Information"
-                },
-                p {
-                    style: r"
-                        margin-top: -0.5em;
-                        font-size: 1.5em;
-                    ",
-
-                    "Name: {engine.name}"
-                },
-                p {
-                    style: r"
-                        margin-top: -0.5em;
-                        margin-bottom: 0.2em;
-                        font-size: 1.5em;
-                    ",
-
-                    "Author: {engine.author}"
-                },
-
-                // Edit alias
-                div {
-                    style: input_field_style,
-                    p { style: input_paragraph_style, "Alias:" },
-                    input {
-                        style: input_box_style,
-                        value: "{engine.alias}",
-                        oninput: move |event| {
-                            engines.write().get_mut(&engine.id).unwrap().alias = event.inner().value.to_string();
-                        }
-                    }
-                },
-
-                // Edit Elo
-                div {
-                    style: input_field_style,
-                    p { style: input_paragraph_style, "Elo:" },
-                    input {
-                        style: input_box_style,
-                        value: "{engine.elo}",
-                        oninput: move |event| {
-                            match event.inner().value.to_string().parse::<u32>() {
-                                Ok(elo) => {
-                                    engines.write().get_mut(&engine.id).unwrap().elo = elo
-                                },
-                                Err(_) => println!("Invalid Elo"),
-                            }
-                        }
-                    }
-                },
-
-                // Edit path
-                div {
-                    style: r"
-                        {input_field_style};
-                        height: 2em;
-                    ",
-                    p { style: input_paragraph_style, "Path:" },
+            match engine {
+                None => render!{ div {
                     p {
+                        style: "font-size: 1.5em; font-weight: bold;",
+                        "No engine selected."
+                    }
+                }},
+                Some(engine) => render!{
+                    // Container
+                    div {
                         style: r"
-                            white-space: nowrap;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            direction: rtl;
-                            {input_box_style}
-                            self-align: flex-end;
-                            margin-left: 1em;
-                            
-                            width: 72%;
+                            display: flex;
+                            flex-flow: column;
+                            overflow: scroll;
                         ",
-                        "{engine.path.to_str().unwrap()}",
-                    },
-                    p {
-                        class: "file",
-                        style: r"
-                            text-align: right;
-                            font-size: 1.5em;
-                        ",
-
-                        onclick: move |_event| {
-                            let mut engines = engines.write();
-                            let path = match open_file_dialog() {
-                                Err(_) => return,
-                                Ok(p) => p,
-                            };
-                            engines.get_mut(&engine.id).unwrap().path = path;
+        
+                        // Buttons
+                        p {
+                            style: "font-size: 1.5em; font-weight: bold;",
+                            "{engine.alias}"
+                        }
+                        p {
+                            style: r"
+                                margin-top: -0.5em;
+                                font-size: 1.5em;
+                            ",
+        
+                            "Name: {engine.name}"
                         },
-
-                        "📂"
+                        p {
+                            style: r"
+                                margin-top: -0.5em;
+                                margin-bottom: 0.2em;
+                                font-size: 1.5em;
+                            ",
+        
+                            "Author: {engine.author}"
+                        },
+        
+                        // Edit alias
+                        div {
+                            style: input_field_style,
+                            p { style: input_paragraph_style, "Alias:" },
+                            input {
+                                style: input_box_style,
+                                value: "{engine.alias}",
+                                oninput: move |event| {
+                                    engines.write().get_mut(&engine.id).unwrap().alias = event.inner().value.to_string();
+                                }
+                            }
+                        },
+        
+                        // Edit Elo
+                        div {
+                            style: input_field_style,
+                            p { style: input_paragraph_style, "Elo:" },
+                            input {
+                                style: input_box_style,
+                                value: "{engine.elo}",
+                                oninput: move |event| {
+                                    match event.inner().value.to_string().parse::<u32>() {
+                                        Ok(elo) => {
+                                            engines.write().get_mut(&engine.id).unwrap().elo = elo
+                                        },
+                                        Err(_) => println!("Invalid Elo"),
+                                    }
+                                }
+                            }
+                        },
+        
+                        // Edit path
+                        div {
+                            style: r"
+                                {input_field_style};
+                                height: 2em;
+                            ",
+                            p { style: input_paragraph_style, "Path:" },
+                            p {
+                                style: r"
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    direction: rtl;
+                                    {input_box_style}
+                                    self-align: flex-end;
+                                    margin-left: 1em;
+                                    
+                                    width: 72%;
+                                ",
+                                "{engine.path.to_str().unwrap()}",
+                            },
+                            p {
+                                class: "file",
+                                style: r"
+                                    text-align: right;
+                                    font-size: 1.5em;
+                                ",
+        
+                                onclick: move |_event| {
+                                    let mut engines = engines.write();
+                                    let path = match open_file_dialog() {
+                                        Err(_) => return,
+                                        Ok(p) => p,
+                                    };
+                                    engines.get_mut(&engine.id).unwrap().path = path;
+                                },
+        
+                                "📂"
+                            }
+                        },
                     }
                 },
             }
-        }),
-    }
+        }
+    })
 }

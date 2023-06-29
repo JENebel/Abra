@@ -5,28 +5,17 @@ pub fn Game(cx: Scope, interactible: bool) -> Element {
     cx.render(rsx!{
         // Container
         div {
-            style: r"
-                display: flex;
-                flex-flow: row;
-                height: 100%;
-                flex: 1;
-                background-color: #A4A6A5;
-                overflow: hidden;
-            ",
+            class: "page",
 
             // Menu
             div {
-                style: "
-                    height: 100%;
-                    min-width: 35em; 
-                ",
+                class: "side-panel box",
 
                 div {
                     // If interactible show the play/pause, cancel, adjudicate and new buttons on a row in a rounded box
                     if interactible {
                         render! {
                             div {
-                                class: "box",
                                 style: "display: flex; flex-direction: row;",
 
                                 button {
@@ -63,7 +52,6 @@ pub fn Game(cx: Scope, interactible: bool) -> Element {
 
                     render! {
                         div {
-                            class: "box",
                             style: "display: flex; flex-direction: row;",
 
                             div {

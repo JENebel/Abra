@@ -1,8 +1,25 @@
+.page {
+    display: flex;
+    flex-flow: row;
+    min-height: 100%;
+    max-height: 100%;
+    flex: 1;
+    background-color: #A4A6A5;
+}
+
 .box {
     border: solid 1px gray;
     border-radius: 5px;
     background-color: lightgray;
     margin: 1em;
+}
+
+.side-panel {
+    min-height: 100%;
+    max-height: 100%;
+    min-width: 30em;
+    max-width: 30em;
+    padding: 0.5em;
 }
 
 .black {
