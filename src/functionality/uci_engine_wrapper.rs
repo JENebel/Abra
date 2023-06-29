@@ -20,42 +20,24 @@ impl EngineWrapper {
         println!("Getting info from engine: {}", path.as_path().display());
         let mut engine = EngineWrapper::launch(Engine { path: path.clone(), ..Default::default() })?;
         engine.send("uci");
-        let mut name = "Unknown".to_string();
+        let mut name = "Unnamed".to_string();
         let mut author = "Unknown".to_string();
         let mut options: Vec<UCIOption> = Vec::new();
 
         loop {
             match engine.receive() {
                 Output(output) => {
-                    let output = output.trim();
+                    let mut output = output.trim();
                     if output.starts_with("id name") {
-                        name = output.split("id name ").nth(1).unwrap().to_string();
+                        name = output.split("id name ").nth(1).unwrap().trim().to_string();
                     } else if output.starts_with("id author") {
-                        author = output.split("id author ").nth(1).unwrap().to_string();
-                    } else if output.starts_with("option name Clear Hash type button") {
-                        let mut option = UCIOption::default();
-                        option.name = "Clear Hash".to_string();
-                        option.opt_type = "button".to_string();
-                        options.push(option);
-                    } else if output.starts_with("option") {
-                        let mut option = UCIOption::default();
-                        let mut parts = output.split(" ");
-                        option.name = parts.nth(2).unwrap().to_string();
-                        option.opt_type = parts.nth(1).unwrap().to_string();
-                        option.default = parts.nth(1).unwrap().to_string();
-                        if option.opt_type == "spin" {
-                            option.min = parts.nth(1).unwrap().to_string();
-                            option.max = parts.nth(1).unwrap().to_string();
-                        } else if option.opt_type == "combo" {
-                            let mut vars = Vec::new();
-                            for var in parts.step_by(2) {
-                                vars.push(var.to_string());
-                            }
-                            option.vars = vars;
-                        }
-                        option.value = option.default.clone();
-                        options.push(option);
+                        author = output.split("id author ").nth(1).unwrap().trim().to_string();
                     }
+
+                    else if output.starts_with("option") {
+                        options.push(UCIOption::parse(&mut output)?);
+                    }
+
                     else if output.contains("uciok") {
                         break;
                     }

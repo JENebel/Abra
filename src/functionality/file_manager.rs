@@ -44,7 +44,7 @@ pub fn store_engines(engines: &HashMap<u32, Engine>) -> Result<(), String> {
 
 // Serialize and store engine with id as filename
 pub fn store_engine(engine: &Engine) -> Result<(), String> {
-    let serialized = serde_json::to_string(&engine).unwrap();
+    let serialized = serde_json::to_string_pretty(&engine).unwrap();
     fs::write(format!("{}{}.json", ENGINE_FOLDER, engine.id), serialized).unwrap();
     Ok(())
 }
@@ -55,7 +55,12 @@ pub fn remove_engine(id: u32) -> Result<(), String> {
 }
 
 pub fn open_file_dialog() -> Result<PathBuf, String> {
+    open_file_dialog_with_path(PathBuf::new())
+}
+
+pub fn open_file_dialog_with_path(path: PathBuf) -> Result<PathBuf, String> {
     let path = match FileDialog::new()
+        .set_location(path.parent().unwrap())
         .show_open_single_file() {
             Ok(p) => match p {
                 Some(p) => p,

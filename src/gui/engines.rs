@@ -36,12 +36,24 @@ fn EngineListItem<'a>(cx: Scope<'a>, engine: Engine, engines: &'a UseSharedState
             },
 
             p { 
-                style: "align-self: flex-start; margin: 0;",
+                style: r"
+                    align-self: flex-start;
+                    margin: 0;
+                    max-width: 100%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                ",
+
                 "{engine.alias}"
             },
 
             div {
-                style: "self-align: flex-end; display: flex; flex-flow: row;",
+                style: r"
+                    self-align: flex-end;
+                    display: flex;
+                    flex-flow: row;
+                    max-width: 35%;
+                ",
 
                 p {
                     style: r"

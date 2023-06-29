@@ -150,7 +150,7 @@ pub fn EngineInfo<'a>(cx: Scope<'a>, id: Option<u32>, engines: &'a UseSharedStat
         
                                 onclick: move |_event| {
                                     let mut engines = engines.write();
-                                    let path = match open_file_dialog() {
+                                    let path = match open_file_dialog_with_path(engine.path.clone()) {
                                         Err(_) => return,
                                         Ok(p) => p,
                                     };
