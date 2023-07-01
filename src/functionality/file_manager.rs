@@ -60,7 +60,7 @@ pub fn open_file_dialog() -> Result<PathBuf, String> {
 
 pub fn open_file_dialog_with_path(path: PathBuf) -> Result<PathBuf, String> {
     let path = match FileDialog::new()
-        .set_location(path.parent().unwrap())
+        .set_location(path.parent().unwrap_or("./".as_ref()))
         .show_open_single_file() {
             Ok(p) => match p {
                 Some(p) => p,

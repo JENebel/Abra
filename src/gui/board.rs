@@ -25,7 +25,7 @@ pub fn Board(cx: Scope) -> Element {
                                 display: flex;
                                 align-items: center;
                             ",
-                            background_color: if (row + col) % 2 == 0 { "Beige" } else { "SaddleBrown" },
+                            background_color: if (row + col) % 2 == 0 { "Beige" } else { "#7d4d15" },
 
                             
                         }
