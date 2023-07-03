@@ -20,7 +20,8 @@ pub enum Page {
     Engines,
     Editor,
     Settings,
-    Info,
+    About,
+    Books,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

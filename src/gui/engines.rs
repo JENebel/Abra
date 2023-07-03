@@ -23,7 +23,8 @@ fn EngineListItem<'a>(cx: Scope<'a>, engine: Engine, engines: &'a UseSharedState
                 flex-flow: row;
                 justify-content: space-between;
                 font-size: 1.5em;
-                height: 2.2em;
+                max-height: 2.2em;
+                min-height: 2.2em;
                 {background}
                 cursor: default;
                 overflow: hidden;
@@ -107,32 +108,32 @@ pub fn Engines(cx: Scope) -> Element {
     };
 
     cx.render(rsx!{
-        // Container
+        // Page
         div {
             class: "page",
 
-            // Engine list
+            // Side panel
             div {
                 class: "side-panel box",
 
+                // Title
                 p {
                     style: "font-size: 1.5em; margin: 0.5em; font-weight: bold; text-align: center;",
                     "Installed Engines"
                 }
 
-                // The list
                 div {
                     style: r"
                         flow-direction: column;
-                        height: 100%;
-                        padding: 1em;
-                        overflow-y: scroll;
+                        height: calc(100% - 4em);
+                        overflow: hidden;
                     ",
 
+                    // Install new engine button
                     div {
                         style: "display: flex; flex-direction: row; justify-content: center;",
                         button {
-                            style: "height: 2.2em; margin-bottom: 1em;",
+                            style: "height: 2.2em; margin: 1em;",
                             class: "pure-button",
     
                             onclick: move |_event| { 
@@ -162,11 +163,24 @@ pub fn Engines(cx: Scope) -> Element {
                         },
                     },
 
-                    for engine in sorted_engines {
-                        EngineListItem(cx, engine.clone(), engines)
+                    // Engine list
+                    div {
+                        style: r"
+                            display: flex;
+                            flex: 1;
+                            flex-direction: column;
+                            width: 100%;
+                            height: 100%;
+                            overflow-y: auto;
+                        ",
+
+                        for engine in sorted_engines {
+                            EngineListItem(cx, engine.clone(), engines)
+                        }
                     }
                 }
             },
+            
             // Engine info & settings
             EngineInfo(cx, selected_id, engines),
         }

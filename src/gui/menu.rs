@@ -10,10 +10,11 @@ pub fn Menu(cx: Scope) -> Element {
 
             MenuButton(cx, Page::Game),
             MenuButton(cx, Page::Tourney),
-            MenuButton(cx, Page::Engines),
             MenuButton(cx, Page::Editor),
+            MenuButton(cx, Page::Engines),
+            MenuButton(cx, Page::Books),
             MenuButton(cx, Page::Settings),
-            MenuButton(cx, Page::Info),
+            MenuButton(cx, Page::About),
         }
     })
 }

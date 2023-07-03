@@ -12,7 +12,7 @@ pub fn Board(cx: Scope) -> Element {
                 border: 3px solid gray;
                 font-size: 5em;
                 font-weight: bold;
-                max-height: 100%;
+                max-height: calc(100% - 0.125em);
             ",
 
             // Render chess board cells

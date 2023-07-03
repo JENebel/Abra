@@ -35,17 +35,11 @@ pub fn load_engine(id: u32) -> Result<Engine, String> {
     Ok(engine)
 }
 
-pub fn store_engines(engines: &HashMap<u32, Engine>) -> Result<(), String> {
-    for engine in engines.values() {
-        store_engine(engine)?;
-    }
-    Ok(())
-}
-
 // Serialize and store engine with id as filename
 pub fn store_engine(engine: &Engine) -> Result<(), String> {
     let serialized = serde_json::to_string_pretty(&engine).unwrap();
     fs::write(format!("{}{}.json", ENGINE_FOLDER, engine.id), serialized).unwrap();
+    println!("Stored '{}'", engine.alias);
     Ok(())
 }
 
@@ -60,13 +54,13 @@ pub fn open_file_dialog() -> Result<PathBuf, String> {
 
 pub fn open_file_dialog_with_path(path: PathBuf) -> Result<PathBuf, String> {
     let path = match FileDialog::new()
-        .set_location(path.parent().unwrap_or("./".as_ref()))
+        .set_location(path.parent().unwrap_or("".as_ref()))
         .show_open_single_file() {
             Ok(p) => match p {
                 Some(p) => p,
                 None => return Err("No file selected!".to_string()),
             },
-            Err(_) => return Err("Could not open file dialog!".to_string()),
+            Err(err) => return Err(format!("Could not open file dialog! '{err}'")),
     };
 
     Ok(path)

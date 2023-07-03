@@ -39,12 +39,12 @@ impl UCIOption {
 
                 is_uci_option = 
                     name.starts_with("UCI")
-                    || name == "Hash" 
+                    /*|| name == "Hash" 
                     || name == "NalimovPath"
                     || name == "NalimovCache"
                     || name == "Ponder" 
                     || name == "OwnBook" 
-                    || name == "MultiPV";
+                    || name == "MultiPV";*/
             },
             _ => return Err(format!("Expected 'type' keyword in '{original}'"))
         }
