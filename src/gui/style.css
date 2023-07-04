@@ -1,3 +1,15 @@
+.body {
+    display: flex;
+    flex-flow: column;
+    min-height: 100vh;
+    max-height: 100vh;
+    background-color: #ededed;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
 .page {
     display: flex;
     flex-flow: row;
@@ -5,6 +17,18 @@
     max-height: 100%;
     flex: 1;
     background-color: #A4A6A5;
+}
+
+.menu-btn {
+    margin: 0.25em;
+    margin-bottom: 0.5em;
+    margin-top: 0.25em;
+    height: 2.75em;
+    visibility: visible;
+    width: 7em;
+    font-weight: bold;
+    font-size: 1.2em;
+    padding-top: 0.75em;
 }
 
 .box {

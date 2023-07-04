@@ -12,7 +12,7 @@ pub struct EngineWrapper {
     child: Child,
     sender: Sender<String>,
     receiver: Receiver<Message>,
-    _engine: Engine,
+    engine: Engine,
 }
 
 impl EngineWrapper {
@@ -123,7 +123,7 @@ impl EngineWrapper {
             child,
             sender: in_tx,
             receiver: out_rx,
-            _engine: engine,
+            engine: engine,
         })
     }
 

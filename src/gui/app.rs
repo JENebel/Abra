@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use dioxus_desktop::{WindowBuilder, LogicalSize};
+use dioxus_router::{Router, Route, Redirect};
 
 use super::*;
 
@@ -32,23 +33,11 @@ pub enum SelectedEngine {
 
 pub type EngineMap = HashMap<u32, Engine>;
 
-fn App(cx: Scope) -> Element {
-    use_shared_state_provider(cx, || Page::Engines);
-    use_shared_state_provider(cx, || load_all_engines().unwrap());
-    use_shared_state_provider(cx, || SelectedEngine::None);
-    let page = use_shared_state::<Page>(cx).unwrap();
-    
+pub fn RenderPage<'a>(cx: Scope<'a>, element: Element<'a>, page: Page) -> Element<'a> {
+    let active_page = use_shared_state::<Page>(cx).unwrap();
+    *active_page.write_silent() = page;
+
     cx.render(rsx!{
-        link { 
-            href:"https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css",
-            rel:"stylesheet"
-        },
-
-        link { 
-            href:"src/gui/style.css",
-            rel:"stylesheet"
-        },
-
         body {
             style: r"
                 display: flex;
@@ -75,13 +64,34 @@ fn App(cx: Scope) -> Element {
                 ",
 
                 Menu(cx),
-                match *page.read() {
-                    Page::Game => Game(cx, true),
-                    Page::Tourney => TourneyPage(cx),
-                    Page::Engines => Engines(cx),
-                    _ => render!{ p { "Not implemented yet" } }
-                }
+                element
             }
+        }
+    })
+}
+
+fn App(cx: Scope) -> Element {
+    use_shared_state_provider(cx, || Page::Game);
+    use_shared_state_provider(cx, || load_all_engines().unwrap());
+    use_shared_state_provider(cx, || SelectedEngine::None);
+    
+    cx.render(rsx!{
+        link { 
+            href:"https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css",
+            rel:"stylesheet"
+        },
+
+        link { 
+            href:"src/gui/style.css",
+            rel:"stylesheet"
+        },
+
+        Router {
+            Route { to: "/Game", RenderPage(cx, GamePage(cx), Page::Game) },
+            Route { to: "/Tourney", RenderPage(cx, TourneyPage(cx), Page::Tourney) },
+            Route { to: "/Engines", RenderPage(cx, EnginesPage(cx), Page::Engines) },
+
+            Redirect { from: "", to: "/Game" }
         }
     })
 }

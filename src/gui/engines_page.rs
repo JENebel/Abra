@@ -94,7 +94,7 @@ fn EngineListItem<'a>(cx: Scope<'a>, engine: Engine, engines: &'a UseSharedState
     })
 }
 
-pub fn Engines(cx: Scope) -> Element {
+pub fn EnginesPage(cx: Scope) -> Element {
     let engines = use_shared_state::<HashMap<u32, Engine>>(cx).unwrap();
 
     let mut sorted_engines: Vec<Engine> = engines.read().values().cloned().collect::<Vec<Engine>>();

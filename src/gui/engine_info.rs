@@ -157,6 +157,7 @@ pub fn EngineInfo<'a>(cx: Scope<'a>, id: Option<u32>, engines: &'a UseSharedStat
                             style: input_field_style,
                             p { style: input_paragraph_style, "Elo:" },
                             input {
+                                r#type: "number",
                                 style: input_box_style,
                                 value: "{engine.elo}",
                                 oninput: move |event| {
@@ -517,6 +518,8 @@ pub fn Option<'a>(cx: Scope<'a>, id: u32, engines: &'a UseSharedState<HashMap<u3
                             self-align: flex-end;
                             text-align: center;
                             margin-left: auto;
+                            overflow-right: visible;
+                            white-space: nowrap;
                         ",
 
                         "\"{default}\""

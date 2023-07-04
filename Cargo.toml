@@ -4,13 +4,15 @@ version = "0.1.0"
 authors = ["Joachim Enggaard Nebel"]
 edition = "2021"
 license = "BSD-2-Clause"
-description = "Chess GUI with a focus on engine testing tournaments"
-
+description = "Chess GUI with a focus on engine testing and strength assessment."
 
 [dependencies]
 dioxus = { git = "https://github.com/DioxusLabs/dioxus" }
 dioxus-desktop = { git = "https://github.com/DioxusLabs/dioxus" }
-serde = "1.0.164"
-serde_json = "1.0.97"
+dioxus-router = { git = "https://github.com/DioxusLabs/dioxus" }
+serde = "1.0.166"
+serde_json = "1.0.99"
 rand = "0.8.5"
 native-dialog = "0.6.4"
+
+shakmaty = {version = "0.26.0", features = ["variant"]}

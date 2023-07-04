@@ -1,3 +1,5 @@
+use dioxus_router::Link;
+
 use super::*;
 
 pub fn Menu(cx: Scope) -> Element {
@@ -25,19 +27,6 @@ pub fn MenuButton<'a>(cx: Scope<'a>, page: Page) -> Element<'a> {
 
     let active = *active_page.read() == page;
 
-    let button = rsx!{
-        button {
-            class: "pure-button",
-            style: "margin: 0.25em; margin-bottom: 0.5em; margin-top: 0.25em; height: 3em; visibility: visible; width: 8em; font-weight: bold;",
-            onclick: move |_event| {
-                if !active {
-                    *active_page.write() = page;
-                }
-            },
-            "{text}",
-        }
-    };
-
     let visibility = if active { "visible" } else { "hidden" };
 
     cx.render(
@@ -56,9 +45,14 @@ pub fn MenuButton<'a>(cx: Scope<'a>, page: Page) -> Element<'a> {
                     border-width: 0.16em;
                     border-bottom: none;
                     background-color: #A4A6A5;
+                    padding-top: 0.25em;
                     visibility: {visibility};
                 ",
-                button,
+                Link {
+                    class: "pure-button menu-btn",
+                    to: "/{text}",
+                    "{text}",
+                },
             }
         }
     )

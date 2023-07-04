@@ -6,16 +6,16 @@ pub use dioxus::prelude::*;
 
 mod app;
 mod menu;
-mod game;
+mod game_page;
 mod tourney_page;
 mod board;
-mod engines;
+mod engines_page;
 mod engine_info;
 
 pub use app::*;
 use menu::*;
 use tourney_page::*;
-use game::*;
+use game_page::*;
 use board::*;
-use engines::*;
+use engines_page::*;
 use engine_info::*;
