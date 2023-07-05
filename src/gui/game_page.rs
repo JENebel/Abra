@@ -1,8 +1,17 @@
+use shakmaty::{Position, Move, san::San, uci::Uci};
+
 use super::*;
 
 pub fn GamePage(cx: Scope) -> Element {
-    use_shared_state_provider(cx, || Option::<Game>::None);
+    use_shared_state_provider(cx, || Option::<Game>::Some(Game::new_standard_game(Player::Human, Player::Human)));
     let game = use_shared_state::<Option::<Game>>(cx).unwrap();
+
+    let uci: Uci = "g1f3".parse().unwrap();
+    println!("{}", game.read().as_ref().unwrap().current_position.board());
+    let m = &uci.to_move(&game.read().as_ref().unwrap().current_position).unwrap();
+    game.write_silent().as_mut().unwrap().current_position.play_unchecked(m);
+
+
 
     cx.render(rsx!{
         // Container

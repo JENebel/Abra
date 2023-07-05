@@ -8,7 +8,7 @@ pub enum Player {
 }
 pub struct Game {
     start_position: VariantPosition,
-    current_position: VariantPosition,
+    pub current_position: VariantPosition,
     white: Option<EngineWrapper>,
     black: Option<EngineWrapper>,
     move_history: Vec<Move>,
