@@ -71,7 +71,7 @@ pub fn RenderPage<'a>(cx: Scope<'a>, element: Element<'a>, page: Page) -> Elemen
 }
 
 fn App(cx: Scope) -> Element {
-    use_shared_state_provider(cx, || Page::Game);
+    use_shared_state_provider(cx, || Page::Tourney);
     use_shared_state_provider(cx, || load_all_engines().unwrap());
     use_shared_state_provider(cx, || SelectedEngine::None);
     

@@ -1,15 +1,9 @@
-use shakmaty::{variant::VariantPosition, Position, Square, File, Rank, Role, Color};
+use shakmaty::{Position, Square, File, Rank, Role, Color};
 
 use super::*;
 
 pub fn Board(cx: Scope) -> Element {
     let game = use_shared_state::<Option::<Game>>(cx).unwrap();
-    /*let game = Game::new_standard_game(Player::Human, Player::Human);
-
-    let position = match game.current_position {
-        VariantPosition::Chess(chess) => chess,
-        _ => panic!("Not a chess game"),
-    };*/
 
     cx.render(rsx!{
         // Container
